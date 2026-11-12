@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FinLedger Pro - Personal Finance & Ledger Manager</title>
+  <title>FinLedger Pro - Personal Finance</title>
+  
+  <!-- PWA OFFLINE SETTINGS -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIwIiBmaWxsPSIjMTBiOTgxIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iNjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiPuKCuTwvdGV4dD48L3N2Zz4=">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -57,7 +63,7 @@
     </div>
   </div>
 
-  <!-- SIDEBAR HAMBURGER MENU DRAWER (☰) -->
+  <!-- SIDEBAR MENU -->
   <div id="sideMenuBackdrop" onclick="toggleMenu(false)" class="fixed inset-0 bg-slate-950/60 z-40 hidden no-print backdrop-blur-sm transition-opacity"></div>
   <aside id="sideMenuDrawer" class="fixed top-0 right-0 h-full w-72 bg-slate-900 text-white z-50 transform translate-x-full transition-transform duration-200 ease-in-out p-5 shadow-2xl flex flex-col justify-between no-print">
     <div class="space-y-5">
@@ -79,28 +85,23 @@
 
         <button onclick="toggleMenu(false); lockApp();" class="w-full text-left bg-slate-800 hover:bg-slate-700 px-3.5 py-2.5 rounded-lg flex items-center justify-between transition">
           <span>🔒 Lock App</span>
-          <span class="text-xs text-slate-400">Lock Now</span>
         </button>
 
         <button onclick="toggleMenu(false); changePinFlow();" class="w-full text-left bg-slate-800 hover:bg-slate-700 px-3.5 py-2.5 rounded-lg flex items-center justify-between transition">
           <span>🔑 Security PIN</span>
-          <span class="text-xs text-slate-400">Change</span>
         </button>
 
         <button onclick="exportData()" class="w-full text-left bg-slate-800 hover:bg-slate-700 px-3.5 py-2.5 rounded-lg flex items-center justify-between transition">
           <span>📥 Export Backup</span>
-          <span class="text-xs text-slate-400">JSON</span>
         </button>
 
         <label class="w-full text-left bg-slate-800 hover:bg-slate-700 px-3.5 py-2.5 rounded-lg flex items-center justify-between transition cursor-pointer">
           <span>📤 Import Backup</span>
-          <span class="text-xs text-slate-400">Restore</span>
           <input type="file" id="importFile" accept=".json" class="hidden" onchange="importData(event)" />
         </label>
 
         <button onclick="toggleMenu(false); window.print();" class="w-full text-left bg-slate-800 hover:bg-slate-700 px-3.5 py-2.5 rounded-lg flex items-center justify-between transition">
           <span>🖨️ Print Statement</span>
-          <span class="text-xs text-slate-400">PDF</span>
         </button>
       </div>
     </div>
@@ -109,7 +110,7 @@
       <button onclick="clearAllData()" class="w-full bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/30 text-sm font-semibold py-2.5 rounded-lg transition">
         Reset All Data
       </button>
-      <p class="text-center text-[10px] text-slate-500 mt-2">FinLedger Pro v2.0 • Offline Ready</p>
+      <p class="text-center text-[10px] text-emerald-400 mt-2 font-semibold">100% Offline Ready PWA</p>
     </div>
   </aside>
 
@@ -120,34 +121,16 @@
         <div class="w-9 h-9 rounded-lg bg-emerald-500 flex items-center justify-center font-bold text-slate-950 text-lg">₹</div>
         <div>
           <h1 class="font-bold text-lg leading-tight">FinLedger Pro</h1>
-          <p class="text-xs text-slate-400">Personal Finance & Independent Ledgers</p>
+          <p class="text-xs text-slate-400">Offline Personal Finance</p>
         </div>
       </div>
 
       <div class="flex items-center gap-2">
-        <button onclick="lockApp()" title="Quick Lock" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-sm border border-slate-700 transition">
-          🔒
-        </button>
-        <button onclick="toggleMenu(true)" title="Menu & Options" class="bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg font-bold text-base border border-slate-700 transition flex items-center gap-1.5">
-          <span>☰</span>
-        </button>
+        <button onclick="lockApp()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-sm border border-slate-700 transition">🔒</button>
+        <button onclick="toggleMenu(true)" class="bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg font-bold text-base border border-slate-700 transition flex items-center gap-1.5">☰</button>
       </div>
     </div>
   </header>
-
-  <!-- WEEKLY BACKUP REMINDER BANNER -->
-  <div id="backupReminderBanner" class="bg-amber-500/15 border-b border-amber-500/30 text-amber-900 px-4 py-2.5 hidden no-print">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs">
-      <div class="flex items-center gap-2">
-        <span class="text-base">⚠️</span>
-        <span><b>ബാക്കപ്പ് ഓർമ്മപ്പെടുത്തൽ:</b> കഴിഞ്ഞ 7 ദിവസമായി നിങ്ങൾ ബാക്കപ്പ് എടുത്തിട്ടില്ല. ഫോൺ ഡാറ്റ നഷ്ടപ്പെടാതിരിക്കാൻ ഒരു ബാക്കപ്പ് സേവ് ചെയ്യുക.</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <button onclick="exportData()" class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-1 rounded font-semibold transition">Export JSON</button>
-        <button onclick="dismissBackupBanner()" class="text-slate-500 hover:text-slate-800 text-sm font-bold px-1.5">✕</button>
-      </div>
-    </div>
-  </div>
 
   <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
 
@@ -156,7 +139,6 @@
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
         <div class="text-xs font-medium text-slate-500 uppercase">System Cash (Book)</div>
         <div id="kpiSystemCash" class="text-2xl font-bold text-slate-900 mt-1">₹0.00</div>
-        <div class="text-xs text-slate-400 mt-1">Opening Cash + Inflows - Outflows</div>
       </div>
 
       <div class="bg-white p-4 rounded-xl border-2 border-indigo-100 shadow-sm lg:col-span-2">
@@ -164,15 +146,8 @@
           <div>
             <div class="text-xs font-semibold text-indigo-600 uppercase">Actual Physical Cash & Bank</div>
             <div class="flex items-center gap-2 mt-1">
-              <input
-                type="number"
-                step="0.01"
-                id="actualCashInput"
-                oninput="updateActualCash()"
-                placeholder="0.00"
-                class="border border-slate-300 rounded-lg px-3 py-1.5 text-lg font-bold w-44 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-              <button onclick="syncActualWithBook()" title="Match Actual with System Cash" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-2 rounded-lg no-print">Match Book</button>
+              <input type="number" step="0.01" id="actualCashInput" oninput="updateActualCash()" placeholder="0.00" class="border border-slate-300 rounded-lg px-3 py-1.5 text-lg font-bold w-44 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              <button onclick="syncActualWithBook()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-2 rounded-lg no-print">Match Book</button>
             </div>
           </div>
           <div class="text-right">
@@ -186,13 +161,11 @@
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
         <div class="text-xs font-medium text-slate-500 uppercase">Total Debtors (Receivable)</div>
         <div id="kpiDebtors" class="text-2xl font-bold text-emerald-600 mt-1">₹0.00</div>
-        <div class="text-xs text-slate-400 mt-1">Money owed to you</div>
       </div>
 
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
         <div class="text-xs font-medium text-slate-500 uppercase">Total Creditors (Payable)</div>
         <div id="kpiCreditors" class="text-2xl font-bold text-rose-600 mt-1">₹0.00</div>
-        <div class="text-xs text-slate-400 mt-1">Money you owe others</div>
       </div>
     </section>
 
@@ -203,31 +176,22 @@
           1. Record & Transactions
         </button>
         <button onclick="switchTab('ledgers')" id="tab-ledgers" class="tab-btn border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-medium px-4 py-2.5 text-sm">
-          2. Party Ledgers (Independent Dr / Cr)
+          2. Party Ledgers
         </button>
         <button onclick="switchTab('statements')" id="tab-statements" class="tab-btn border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-medium px-4 py-2.5 text-sm">
-          3. Income Statement & Balance Sheet
+          3. Balance Sheet
         </button>
       </nav>
     </div>
 
-    <!-- TAB 1: RECORD & TRANSACTIONS -->
+    <!-- TAB 1: RECORD -->
     <section id="view-transactions" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div class="space-y-6 no-print">
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-          <h2 class="text-sm font-bold uppercase tracking-wider text-slate-700 mb-2">Opening Cash in Hand/Bank</h2>
-          <input
-            type="number"
-            step="0.01"
-            id="openingCashInput"
-            oninput="updateOpeningCash()"
-            class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-slate-900"
-            placeholder="0.00"
-          />
-          <p class="text-[11px] text-slate-400 mt-1.5">തുടക്കത്തിലുള്ള കൈവശമുള്ള പണം/ബാങ്ക് ബാലൻസ്.</p>
+          <h2 class="text-sm font-bold uppercase tracking-wider text-slate-700 mb-2">Opening Cash Balance</h2>
+          <input type="number" step="0.01" id="openingCashInput" oninput="updateOpeningCash()" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-slate-900" placeholder="0.00" />
         </div>
 
-        <!-- Add Transaction Form -->
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
           <h2 class="text-base font-bold text-slate-900 mb-4">Record Transaction</h2>
           <form id="txForm" onsubmit="handleAddTransaction(event)" class="space-y-3.5">
@@ -239,138 +203,60 @@
               <div>
                 <label class="block text-xs font-medium text-slate-600 mb-1">Type</label>
                 <select id="txType" onchange="handleTypeChange()" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm font-medium">
-                  <optgroup label="Daily Cash Operations">
-                    <option value="INCOME">Income / Gain (+Cash)</option>
-                    <option value="EXPENSE">Daily Expense (-Cash)</option>
-                  </optgroup>
-                  <optgroup label="Party Transactions (Cash Movement)">
-                    <option value="LEND">Debtor Lending (-Cash, +Debtor)</option>
-                    <option value="COLLECT">Debtor Collection (+Cash, -Debtor)</option>
-                    <option value="BORROW">Creditor Borrowing (+Cash, +Creditor)</option>
-                    <option value="REPAY">Creditor Repayment (-Cash, -Creditor)</option>
-                  </optgroup>
-                  <optgroup label="Old Balances (No Cash Impact)">
-                    <option value="OPENING_DEBTOR">Opening Debtor (പഴയ കിട്ടാനുള്ളത്)</option>
-                    <option value="OPENING_CREDITOR">Opening Creditor (പഴയ കൊടുക്കാനുള്ളത്)</option>
-                  </optgroup>
+                  <option value="INCOME">Income (+Cash)</option>
+                  <option value="EXPENSE">Expense (-Cash)</option>
+                  <option value="LEND">Lending (-Cash, +Debtor)</option>
+                  <option value="COLLECT">Collection (+Cash, -Debtor)</option>
+                  <option value="BORROW">Borrowing (+Cash, +Creditor)</option>
+                  <option value="REPAY">Repayment (-Cash, -Creditor)</option>
+                  <option value="OPENING_DEBTOR">Opening Debtor (No Cash)</option>
+                  <option value="OPENING_CREDITOR">Opening Creditor (No Cash)</option>
                 </select>
               </div>
             </div>
 
             <div id="categoryField">
               <label class="block text-xs font-medium text-slate-600 mb-1">Category</label>
-              <input
-                type="text"
-                id="txCategory"
-                list="categorySuggestions"
-                placeholder="e.g., Salary, Food, Rent, Fuel"
-                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
-              />
-              <datalist id="categorySuggestions">
-                <option value="Salary"></option>
-                <option value="Food & Dining"></option>
-                <option value="Rent & Utilities"></option>
-                <option value="Transport & Fuel"></option>
-                <option value="Shopping"></option>
-                <option value="Healthcare"></option>
-                <option value="Family"></option>
-                <option value="Snacks & Tea"></option>
-              </datalist>
+              <input type="text" id="txCategory" list="categorySuggestions" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+              <datalist id="categorySuggestions"><option value="Salary"></option><option value="Food"></option></datalist>
             </div>
 
             <div id="partyField" class="hidden">
-              <label class="block text-xs font-medium text-slate-600 mb-1">Party Name (വ്യക്തിയുടെ / കടയുടെ പേര്)</label>
-              <input
-                type="text"
-                id="txParty"
-                list="partySuggestions"
-                placeholder="e.g., Shop, Sahal, Kaka"
-                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
-              />
+              <label class="block text-xs font-medium text-slate-600 mb-1">Party Name</label>
+              <input type="text" id="txParty" list="partySuggestions" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
               <datalist id="partySuggestions"></datalist>
-              <p class="text-[10px] text-slate-400 mt-1">പേരിനൊപ്പം Dr, Cr എന്ന് എഴുതേണ്ടതില്ല.</p>
             </div>
 
             <div>
-              <div class="flex justify-between items-center mb-1">
-                <label class="block text-xs font-medium text-slate-600">Amount (Quick Math: 50+120)</label>
-              </div>
-              <input
-                type="text"
-                id="txAmount"
-                required
-                onblur="evaluateAmountInput('txAmount')"
-                placeholder="0.00"
-                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm font-semibold"
-              />
+              <label class="block text-xs font-medium text-slate-600 mb-1">Amount (Quick Math: 50+120)</label>
+              <input type="text" id="txAmount" required onblur="evaluateAmountInput('txAmount')" placeholder="0.00" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm font-semibold" />
             </div>
 
             <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1">Description / Notes</label>
-              <input
-                type="text"
-                id="txDesc"
-                placeholder="Optional notes"
-                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
-              />
+              <label class="block text-xs font-medium text-slate-600 mb-1">Notes</label>
+              <input type="text" id="txDesc" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
             </div>
 
-            <button
-              type="submit"
-              class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-2.5 rounded-lg text-sm transition shadow-sm"
-            >
-              + Save Transaction
-            </button>
+            <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-2.5 rounded-lg text-sm transition shadow-sm">+ Save Transaction</button>
           </form>
         </div>
       </div>
 
-      <!-- Transaction Register Table -->
       <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col">
         <div class="p-4 border-b border-slate-200 flex flex-wrap justify-between items-center gap-3">
-          <div>
-            <h2 class="text-base font-bold text-slate-900">Transaction Register</h2>
-            <p class="text-xs text-slate-500">All cash flows and ledger accounts</p>
-          </div>
+          <h2 class="text-base font-bold text-slate-900">Register</h2>
           <div class="flex flex-wrap items-center gap-2 no-print">
-            <select id="filterDateRange" onchange="renderAll()" class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-medium">
-              <option value="ALL">All Time</option>
-              <option value="THIS_MONTH">This Month</option>
-              <option value="LAST_MONTH">Last Month</option>
-              <option value="TODAY">Today</option>
-            </select>
-
             <select id="filterType" onchange="renderAll()" class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs">
-              <option value="ALL">All Types</option>
-              <option value="INCOME">Income</option>
-              <option value="EXPENSE">Expense</option>
-              <option value="LEND">Lending (Debtor)</option>
-              <option value="COLLECT">Collection (Debtor)</option>
-              <option value="BORROW">Borrowing (Creditor)</option>
-              <option value="REPAY">Repayment (Creditor)</option>
-              <option value="OPENING_DEBTOR">Opening Debtor</option>
-              <option value="OPENING_CREDITOR">Opening Creditor</option>
+              <option value="ALL">All</option><option value="INCOME">Income</option><option value="EXPENSE">Expense</option>
             </select>
-            <input
-              type="text"
-              id="searchTx"
-              oninput="renderAll()"
-              placeholder="Search..."
-              class="border border-slate-300 rounded-lg px-3 py-1.5 text-xs w-28"
-            />
+            <input type="text" id="searchTx" oninput="renderAll()" placeholder="Search..." class="border border-slate-300 rounded-lg px-3 py-1.5 text-xs w-28" />
           </div>
         </div>
-
         <div class="overflow-x-auto flex-1">
           <table class="w-full text-left border-collapse">
             <thead>
               <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase">
-                <th class="py-3 px-4">Date</th>
-                <th class="py-3 px-4">Type</th>
-                <th class="py-3 px-4">Particulars</th>
-                <th class="py-3 px-4">Note</th>
-                <th class="py-3 px-4 text-right">Cash Impact</th>
-                <th class="py-3 px-4 text-center no-print">Actions</th>
+                <th class="py-3 px-4">Date</th><th class="py-3 px-4">Type</th><th class="py-3 px-4">Particulars</th><th class="py-3 px-4 text-right">Cash Impact</th><th class="py-3 px-4 text-center no-print">Actions</th>
               </tr>
             </thead>
             <tbody id="txTableBody" class="divide-y divide-slate-100 text-sm"></tbody>
@@ -379,35 +265,23 @@
       </div>
     </section>
 
-    <!-- TAB 2: INDEPENDENT PARTY LEDGERS -->
+    <!-- TAB 2: LEDGERS -->
     <section id="view-ledgers" class="hidden space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          <div class="p-4 border-b border-slate-200">
-            <h2 class="text-base font-bold text-slate-900">Party Accounts Directory</h2>
-            <p class="text-xs text-slate-500">Independent Debtor and Creditor records</p>
-          </div>
+          <div class="p-4 border-b border-slate-200"><h2 class="text-base font-bold text-slate-900">Accounts</h2></div>
           <div class="overflow-y-auto max-h-[540px] divide-y divide-slate-100" id="partyListContainer"></div>
         </div>
-
         <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col">
-          <div class="p-4 border-b border-slate-200 flex flex-wrap justify-between items-center gap-2">
-            <div>
-              <h2 id="selectedPartyTitle" class="text-base font-bold text-slate-900">Select an Account</h2>
-              <p id="selectedPartySubtitle" class="text-xs text-slate-500">Statement of account</p>
-            </div>
+          <div class="p-4 border-b border-slate-200 flex justify-between items-center">
+            <h2 id="selectedPartyTitle" class="text-base font-bold text-slate-900">Select an Account</h2>
             <div id="selectedPartyBadge" class="text-sm font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-700"></div>
           </div>
-
           <div class="overflow-x-auto flex-1">
             <table class="w-full text-left border-collapse">
               <thead>
-                <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase">
-                  <th class="py-3 px-4">Date</th>
-                  <th class="py-3 px-4">Particulars</th>
-                  <th class="py-3 px-4 text-right">Debit (Dr)</th>
-                  <th class="py-3 px-4 text-right">Credit (Cr)</th>
-                  <th class="py-3 px-4 text-right">Balance</th>
+                <tr class="bg-slate-50 border-b text-xs font-semibold text-slate-600 uppercase">
+                  <th class="py-3 px-4">Date</th><th class="py-3 px-4">Particulars</th><th class="py-3 px-4 text-right">Dr</th><th class="py-3 px-4 text-right">Cr</th><th class="py-3 px-4 text-right">Balance</th>
                 </tr>
               </thead>
               <tbody id="partyLedgerBody" class="divide-y divide-slate-100 text-sm"></tbody>
@@ -421,139 +295,47 @@
     <section id="view-statements" class="hidden space-y-6">
       <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         <div class="p-4 bg-slate-900 text-white flex justify-between items-center">
-          <div>
-            <h2 class="text-base font-bold">Income & Expense Statement</h2>
-            <p class="text-xs text-slate-400">Net Surplus / Savings</p>
-          </div>
-          <div id="netIncomeHeaderBadge" class="text-sm font-bold px-3 py-1 rounded bg-slate-800">Net: ₹0.00</div>
+          <h2 class="text-base font-bold">Personal Balance Sheet</h2>
+          <span class="px-3 py-1 text-xs font-bold uppercase rounded-full bg-emerald-500/20 text-emerald-300">Assets = Liab + Equity</span>
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-200">
-          <div class="p-4 flex flex-col justify-between">
-            <div>
-              <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-700 border-b border-emerald-100 pb-2 mb-3">
-                Income & Gains (Inflows)
-              </h3>
-              <table class="w-full text-sm">
-                <tbody id="incomeStatementBody" class="divide-y divide-slate-100"></tbody>
-              </table>
-            </div>
-            <div class="pt-3 mt-4 border-t-2 border-slate-200 flex justify-between font-bold text-slate-900">
-              <span>Total Income</span>
-              <span id="totalIncomeCell" class="text-emerald-600">₹0.00</span>
-            </div>
-          </div>
-
-          <div class="p-4 flex flex-col justify-between">
-            <div>
-              <h3 class="text-xs font-bold uppercase tracking-wider text-rose-700 border-b border-rose-100 pb-2 mb-3">
-                Daily Expenses (Outflows)
-              </h3>
-              <table class="w-full text-sm">
-                <tbody id="expenseStatementBody" class="divide-y divide-slate-100"></tbody>
-              </table>
-            </div>
-            <div class="pt-3 mt-4 border-t-2 border-slate-200 flex justify-between font-bold text-slate-900">
-              <span>Total Expenses</span>
-              <span id="totalExpenseCell" class="text-rose-600">₹0.00</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div class="p-4 bg-slate-900 text-white flex flex-wrap justify-between items-center gap-2">
-          <div>
-            <h2 class="text-base font-bold">Personal Balance Sheet (Balanced)</h2>
-            <p class="text-xs text-slate-400">Assets = Total Liabilities + Personal Net Worth</p>
-          </div>
-          <span class="px-3 py-1 text-xs font-bold uppercase rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
-            Assets = Liabilities + Equity
-          </span>
-        </div>
-
         <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-200">
           <div class="p-5 flex flex-col justify-between">
             <div class="space-y-4">
               <div>
-                <h3 class="text-xs font-bold uppercase tracking-wider text-rose-700 border-b border-slate-200 pb-2 mb-2">
-                  Liabilities (Creditors Payable)
-                </h3>
-                <table class="w-full text-sm">
-                  <tbody id="bsCreditorsBody" class="divide-y divide-slate-100"></tbody>
-                </table>
+                <h3 class="text-xs font-bold text-rose-700 border-b pb-2 mb-2">Liabilities (Creditors)</h3>
+                <table class="w-full text-sm"><tbody id="bsCreditorsBody" class="divide-y divide-slate-100"></tbody></table>
               </div>
-
               <div>
-                <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-700 border-b border-slate-200 pb-2 mb-2">
-                  Personal Equity / Net Worth
-                </h3>
+                <h3 class="text-xs font-bold text-indigo-700 border-b pb-2 mb-2">Personal Equity</h3>
                 <table class="w-full text-sm">
                   <tbody class="divide-y divide-slate-100">
-                    <tr>
-                      <td class="py-2 text-slate-600">Starting Net Capital</td>
-                      <td id="bsOpeningCap" class="py-2 text-right font-medium">₹0.00</td>
-                    </tr>
-                    <tr>
-                      <td class="py-2 text-slate-600">(+) Net Surplus / Deficit</td>
-                      <td id="bsNetIncome" class="py-2 text-right font-medium">₹0.00</td>
-                    </tr>
-                    <tr>
-                      <td class="py-2 text-slate-600">(+/-) Cash Reconciliation Adj.</td>
-                      <td id="bsCashDiffAdj" class="py-2 text-right font-medium">₹0.00</td>
-                    </tr>
-                    <tr class="bg-slate-50 font-semibold">
-                      <td class="py-2 px-2 text-slate-800">Total Net Worth (Equity)</td>
-                      <td id="bsTotalEquity" class="py-2 px-2 text-right text-indigo-700">₹0.00</td>
-                    </tr>
+                    <tr><td class="py-2 text-slate-600">Net Surplus</td><td id="bsNetIncome" class="py-2 text-right font-medium">₹0.00</td></tr>
+                    <tr class="bg-slate-50 font-semibold"><td class="py-2 px-2 text-slate-800">Total Equity</td><td id="bsTotalEquity" class="py-2 px-2 text-right text-indigo-700">₹0.00</td></tr>
                   </tbody>
                 </table>
               </div>
             </div>
-
             <div class="pt-3 mt-6 border-t-2 border-slate-900 flex justify-between font-bold text-base text-slate-900">
-              <span>Total Liabilities & Equity</span>
-              <span id="bsTotalLiabEquity">₹0.00</span>
+              <span>Total Liab & Equity</span><span id="bsTotalLiabEquity">₹0.00</span>
             </div>
           </div>
-
           <div class="p-5 flex flex-col justify-between">
             <div class="space-y-4">
               <div>
-                <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-700 border-b border-slate-200 pb-2 mb-2">
-                  Cash & Bank Balances
-                </h3>
+                <h3 class="text-xs font-bold text-emerald-700 border-b pb-2 mb-2">Cash & Bank</h3>
                 <table class="w-full text-sm">
                   <tbody class="divide-y divide-slate-100">
-                    <tr>
-                      <td class="py-2 text-slate-600">System Book Cash</td>
-                      <td id="bsBookCash" class="py-2 text-right font-medium">₹0.00</td>
-                    </tr>
-                    <tr>
-                      <td class="py-2 text-slate-600">(+/-) Physical Difference</td>
-                      <td id="bsAssetCashDiff" class="py-2 text-right font-medium">₹0.00</td>
-                    </tr>
-                    <tr class="bg-emerald-50/60 font-semibold">
-                      <td class="py-2 px-2 text-slate-800">Actual Physical Cash</td>
-                      <td id="bsActualCash" class="py-2 px-2 text-right text-emerald-700">₹0.00</td>
-                    </tr>
+                    <tr class="bg-emerald-50/60 font-semibold"><td class="py-2 px-2 text-slate-800">Actual Cash</td><td id="bsActualCash" class="py-2 px-2 text-right text-emerald-700">₹0.00</td></tr>
                   </tbody>
                 </table>
               </div>
-
               <div>
-                <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-700 border-b border-slate-200 pb-2 mb-2">
-                  Debtors (Receivables Owed to You)
-                </h3>
-                <table class="w-full text-sm">
-                  <tbody id="bsDebtorsBody" class="divide-y divide-slate-100"></tbody>
-                </table>
+                <h3 class="text-xs font-bold text-emerald-700 border-b pb-2 mb-2">Debtors (Receivables)</h3>
+                <table class="w-full text-sm"><tbody id="bsDebtorsBody" class="divide-y divide-slate-100"></tbody></table>
               </div>
             </div>
-
             <div class="pt-3 mt-6 border-t-2 border-slate-900 flex justify-between font-bold text-base text-slate-900">
-              <span>Total Assets</span>
-              <span id="bsTotalAssets">₹0.00</span>
+              <span>Total Assets</span><span id="bsTotalAssets">₹0.00</span>
             </div>
           </div>
         </div>
@@ -561,859 +343,176 @@
     </section>
   </main>
 
-  <!-- EDIT TRANSACTION MODAL -->
-  <div id="editModal" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 hidden no-print">
-    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4">
-      <div class="flex justify-between items-center border-b pb-2">
-        <h3 class="font-bold text-slate-900">Edit Transaction</h3>
-        <button onclick="closeEditModal()" class="text-slate-400 hover:text-slate-700 text-lg">✕</button>
-      </div>
-      <form id="editForm" onsubmit="handleSaveEdit(event)" class="space-y-3">
-        <input type="hidden" id="editTxId" />
-        <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">Date</label>
-          <input type="date" id="editDate" required class="w-full border rounded-lg px-3 py-2 text-sm" />
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">Type</label>
-          <select id="editType" onchange="handleEditTypeChange()" required class="w-full border rounded-lg px-3 py-2 text-sm">
-            <option value="INCOME">Income / Gain (+Cash)</option>
-            <option value="EXPENSE">Daily Expense (-Cash)</option>
-            <option value="LEND">Debtor Lending (-Cash, +Debtor)</option>
-            <option value="COLLECT">Debtor Collection (+Cash, -Debtor)</option>
-            <option value="BORROW">Creditor Borrowing (+Cash, +Creditor)</option>
-            <option value="REPAY">Creditor Repayment (-Cash, -Creditor)</option>
-            <option value="OPENING_DEBTOR">Opening Debtor (No Cash)</option>
-            <option value="OPENING_CREDITOR">Opening Creditor (No Cash)</option>
-          </select>
-        </div>
-        <div id="editCategoryField">
-          <label class="block text-xs font-medium text-slate-600 mb-1">Category</label>
-          <input type="text" id="editCategory" class="w-full border rounded-lg px-3 py-2 text-sm" />
-        </div>
-        <div id="editPartyField" class="hidden">
-          <label class="block text-xs font-medium text-slate-600 mb-1">Party Name</label>
-          <input type="text" id="editParty" class="w-full border rounded-lg px-3 py-2 text-sm" />
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">Amount</label>
-          <input type="text" id="editAmount" required onblur="evaluateAmountInput('editAmount')" class="w-full border rounded-lg px-3 py-2 text-sm font-semibold" />
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">Notes</label>
-          <input type="text" id="editDesc" class="w-full border rounded-lg px-3 py-2 text-sm" />
-        </div>
-        <div class="flex gap-2 pt-2">
-          <button type="button" onclick="closeEditModal()" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-lg text-sm font-medium">Cancel</button>
-          <button type="submit" class="w-1/2 bg-slate-900 hover:bg-slate-800 text-white py-2 rounded-lg text-sm font-semibold">Save</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
   <script>
     const STORAGE_KEY = 'finledger_pro_state_v2';
     const PIN_KEY = 'finledger_pro_pin_v2';
-    const BACKUP_TIMESTAMP_KEY = 'finledger_last_backup_ts';
 
-    let state = {
-      currency: '₹',
-      openingCash: 0,
-      actualCash: 0,
-      selectedPartyKey: null,
-      transactions: []
-    };
-
+    let state = { currency: '₹', openingCash: 0, actualCash: 0, selectedPartyKey: null, transactions: [] };
     const TX_META = {
-      INCOME:           { label: 'Income',           badge: 'bg-emerald-100 text-emerald-800', cashSign: +1, isParty: false, isOpening: false, partyRole: null },
-      EXPENSE:          { label: 'Expense',          badge: 'bg-rose-100 text-rose-800',       cashSign: -1, isParty: false, isOpening: false, partyRole: null },
-      LEND:             { label: 'Lending (Dr)',     badge: 'bg-blue-100 text-blue-800',       cashSign: -1, isParty: true,  isOpening: false, partyRole: 'DEBTOR' },
-      COLLECT:          { label: 'Collection (Dr)',  badge: 'bg-sky-100 text-sky-800',         cashSign: +1, isParty: true,  isOpening: false, partyRole: 'DEBTOR' },
-      BORROW:           { label: 'Borrowing (Cr)',   badge: 'bg-amber-100 text-amber-800',     cashSign: +1, isParty: true,  isOpening: false, partyRole: 'CREDITOR' },
-      REPAY:            { label: 'Repayment (Cr)',   badge: 'bg-purple-100 text-purple-800',   cashSign: -1, isParty: true,  isOpening: false, partyRole: 'CREDITOR' },
-      OPENING_DEBTOR:   { label: 'Old Debtor',       badge: 'bg-teal-100 text-teal-800',       cashSign:  0, isParty: true,  isOpening: true,  partyRole: 'DEBTOR' },
-      OPENING_CREDITOR: { label: 'Old Creditor',     badge: 'bg-orange-100 text-orange-800',   cashSign:  0, isParty: true,  isOpening: true,  partyRole: 'CREDITOR' }
+      INCOME: { label: 'Income', badge: 'bg-emerald-100 text-emerald-800', cashSign: +1, isParty: false, partyRole: null },
+      EXPENSE: { label: 'Expense', badge: 'bg-rose-100 text-rose-800', cashSign: -1, isParty: false, partyRole: null },
+      LEND: { label: 'Lending', badge: 'bg-blue-100 text-blue-800', cashSign: -1, isParty: true, partyRole: 'DEBTOR' },
+      COLLECT: { label: 'Collection', badge: 'bg-sky-100 text-sky-800', cashSign: +1, isParty: true, partyRole: 'DEBTOR' },
+      BORROW: { label: 'Borrowing', badge: 'bg-amber-100 text-amber-800', cashSign: +1, isParty: true, partyRole: 'CREDITOR' },
+      REPAY: { label: 'Repayment', badge: 'bg-purple-100 text-purple-800', cashSign: -1, isParty: true, partyRole: 'CREDITOR' },
+      OPENING_DEBTOR: { label: 'Old Dr', badge: 'bg-teal-100 text-teal-800', cashSign: 0, isParty: true, partyRole: 'DEBTOR' },
+      OPENING_CREDITOR: { label: 'Old Cr', badge: 'bg-orange-100 text-orange-800', cashSign: 0, isParty: true, partyRole: 'CREDITOR' }
     };
 
-    function evaluateAmountInput(inputId) {
-      const el = document.getElementById(inputId);
+    function evaluateAmountInput(id) {
+      let el = document.getElementById(id);
       let val = el.value.trim();
-      if (!val) return;
       if (/^[0-9+\-*/. ()]+$/.test(val)) {
-        try {
-          const res = Function(`'use strict'; return (${val})`)();
-          if (!isNaN(res) && isFinite(res) && res >= 0) {
-            el.value = (Math.round(res * 100) / 100).toFixed(2);
-          }
-        } catch (e) {}
+        try { let res = Function(`'use strict'; return (${val})`)(); if (!isNaN(res) && res >= 0) el.value = res.toFixed(2); } catch(e){}
       }
     }
 
-    let currentPinInput = '';
-    let pinMode = 'UNLOCK';
-    let tempNewPin = '';
-
+    let currentPinInput = '', pinMode = 'UNLOCK', tempNewPin = '';
     function initPinLock() {
       const savedPin = localStorage.getItem(PIN_KEY);
-      const overlay = document.getElementById('pinOverlay');
-      overlay.classList.remove('hidden');
-      currentPinInput = '';
-      updatePinDots();
-
-      if (!savedPin) {
-        pinMode = 'SET';
-        document.getElementById('pinTitle').textContent = 'Set 4-Digit PIN';
-        document.getElementById('pinSubtitle').textContent = 'Create a PIN to secure your ledger';
-      } else {
-        pinMode = 'UNLOCK';
-        document.getElementById('pinTitle').textContent = 'Enter 4-Digit PIN';
-        document.getElementById('pinSubtitle').textContent = 'Enter PIN to open FinLedger';
-      }
+      document.getElementById('pinOverlay').classList.remove('hidden');
+      currentPinInput = ''; updatePinDots();
+      if (!savedPin) { pinMode = 'SET'; document.getElementById('pinTitle').textContent = 'Set 4-Digit PIN'; } 
+      else { pinMode = 'UNLOCK'; document.getElementById('pinTitle').textContent = 'Enter PIN'; }
       document.getElementById('pinError').textContent = '';
     }
-
     function pressPinDigit(digit) {
       if (currentPinInput.length >= 4) return;
-      currentPinInput += digit;
-      document.getElementById('pinError').textContent = '';
-      updatePinDots();
-      if (currentPinInput.length === 4) {
-        setTimeout(evaluatePinInput, 120);
-      }
+      currentPinInput += digit; document.getElementById('pinError').textContent = ''; updatePinDots();
+      if (currentPinInput.length === 4) setTimeout(evaluatePinInput, 120);
     }
-
-    function backspacePinDigit() {
-      currentPinInput = currentPinInput.slice(0, -1);
-      updatePinDots();
-    }
-
-    function clearPinDigits() {
-      currentPinInput = '';
-      updatePinDots();
-    }
-
+    function backspacePinDigit() { currentPinInput = currentPinInput.slice(0, -1); updatePinDots(); }
+    function clearPinDigits() { currentPinInput = ''; updatePinDots(); }
     function updatePinDots() {
       for (let i = 0; i < 4; i++) {
-        const dot = document.getElementById(`dot-${i}`);
-        if (i < currentPinInput.length) {
-          dot.className = 'w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-emerald-400 scale-110 transition-all';
-        } else {
-          dot.className = 'w-3.5 h-3.5 rounded-full border-2 border-slate-600 transition-all';
-        }
+        let dot = document.getElementById(`dot-${i}`);
+        dot.className = i < currentPinInput.length ? 'w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-emerald-400' : 'w-3.5 h-3.5 rounded-full border-2 border-slate-600';
       }
     }
-
-    function triggerPinError(msg) {
-      const card = document.getElementById('pinCard');
-      document.getElementById('pinError').textContent = msg;
-      card.classList.remove('shake');
-      void card.offsetWidth;
-      card.classList.add('shake');
-      currentPinInput = '';
-      updatePinDots();
-    }
-
     function evaluatePinInput() {
       const savedPin = localStorage.getItem(PIN_KEY);
-      if (pinMode === 'SET') {
-        tempNewPin = currentPinInput;
-        currentPinInput = '';
-        pinMode = 'CONFIRM';
-        document.getElementById('pinTitle').textContent = 'Confirm 4-Digit PIN';
-        document.getElementById('pinSubtitle').textContent = 'Re-enter the same 4 digits';
-        updatePinDots();
-      } else if (pinMode === 'CONFIRM') {
-        if (currentPinInput === tempNewPin) {
-          localStorage.setItem(PIN_KEY, currentPinInput);
-          document.getElementById('pinOverlay').classList.add('hidden');
-          currentPinInput = '';
-        } else {
-          pinMode = 'SET';
-          document.getElementById('pinTitle').textContent = 'Set 4-Digit PIN';
-          triggerPinError('PIN did not match! Try again.');
-        }
+      if (pinMode === 'SET') { tempNewPin = currentPinInput; currentPinInput = ''; pinMode = 'CONFIRM'; document.getElementById('pinTitle').textContent = 'Confirm PIN'; updatePinDots(); }
+      else if (pinMode === 'CONFIRM') {
+        if (currentPinInput === tempNewPin) { localStorage.setItem(PIN_KEY, currentPinInput); document.getElementById('pinOverlay').classList.add('hidden'); currentPinInput = ''; }
+        else { pinMode = 'SET'; document.getElementById('pinTitle').textContent = 'Set PIN'; document.getElementById('pinError').textContent = 'PIN Mismatch!'; currentPinInput = ''; updatePinDots(); }
       } else if (pinMode === 'UNLOCK') {
-        if (currentPinInput === savedPin) {
-          document.getElementById('pinOverlay').classList.add('hidden');
-          currentPinInput = '';
-        } else {
-          triggerPinError('Incorrect PIN! Please try again.');
-        }
+        if (currentPinInput === savedPin) { document.getElementById('pinOverlay').classList.add('hidden'); currentPinInput = ''; }
+        else { document.getElementById('pinError').textContent = 'Incorrect PIN!'; currentPinInput = ''; updatePinDots(); }
       }
     }
-
-    function lockApp() {
-      initPinLock();
-    }
-
-    function changePinFlow() {
-      const currentSaved = localStorage.getItem(PIN_KEY);
-      if (currentSaved) {
-        const verify = prompt('നിങ്ങളുടെ ഇപ്പോഴത്തെ 4-അക്ക PIN നൽകുക:');
-        if (verify !== currentSaved) {
-          alert('നൽകിയ PIN തെറ്റാണ്!');
-          return;
-        }
-      }
-      localStorage.removeItem(PIN_KEY);
-      initPinLock();
-    }
+    function lockApp() { initPinLock(); }
+    function changePinFlow() { localStorage.removeItem(PIN_KEY); initPinLock(); }
 
     function toggleMenu(show) {
-      const drawer = document.getElementById('sideMenuDrawer');
-      const backdrop = document.getElementById('sideMenuBackdrop');
-      if (show) {
-        backdrop.classList.remove('hidden');
-        setTimeout(() => drawer.classList.remove('translate-x-full'), 10);
-      } else {
-        drawer.classList.add('translate-x-full');
-        setTimeout(() => backdrop.classList.add('hidden'), 200);
-      }
+      document.getElementById('sideMenuBackdrop').classList.toggle('hidden', !show);
+      document.getElementById('sideMenuDrawer').classList.toggle('translate-x-full', !show);
     }
-
-    function checkBackupReminder() {
-      const lastTs = localStorage.getItem(BACKUP_TIMESTAMP_KEY);
-      const banner = document.getElementById('backupReminderBanner');
-      if (!lastTs) {
-        if (state.transactions.length > 0) banner.classList.remove('hidden');
-      } else {
-        const diffDays = (Date.now() - Number(lastTs)) / (1000 * 60 * 60 * 24);
-        if (diffDays >= 7 && state.transactions.length > 0) {
-          banner.classList.remove('hidden');
-        } else {
-          banner.classList.add('hidden');
-        }
-      }
-    }
-
-    function dismissBackupBanner() {
-      document.getElementById('backupReminderBanner').classList.add('hidden');
-    }
-
-    function fmt(num) {
-      const n = Number(num) || 0;
-      const sign = n < 0 ? '-' : '';
-      return sign + state.currency + Math.abs(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-
-    function saveState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
-
-    function loadState() {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        try {
-          state = JSON.parse(raw);
-        } catch (e) {
-          state = { currency: '₹', openingCash: 0, actualCash: 0, selectedPartyKey: null, transactions: [] };
-        }
-      }
-      const oldRaw = localStorage.getItem('finledger_pro_state_v1');
-      if (!raw && oldRaw) {
-        try {
-          const old = JSON.parse(oldRaw);
-          state.currency = old.currency || '₹';
-          state.openingCash = old.openingCash || 0;
-          state.actualCash = old.actualCash || 0;
-          state.transactions = old.transactions || [];
-          saveState();
-        } catch (e) {}
-      }
-    }
-
-    function syncInputsFromState() {
-      document.getElementById('currencySelect').value = state.currency || '₹';
-      document.getElementById('openingCashInput').value = state.openingCash || '';
-      document.getElementById('actualCashInput').value = state.actualCash || '';
-      document.getElementById('txDate').value = new Date().toISOString().slice(0, 10);
-    }
-
+    function fmt(num) { return (num < 0 ? '-' : '') + state.currency + Math.abs(num).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
+    function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    function loadState() { let raw = localStorage.getItem(STORAGE_KEY); if (raw) state = JSON.parse(raw); }
+    function syncInputsFromState() { document.getElementById('actualCashInput').value = state.actualCash || ''; document.getElementById('txDate').value = new Date().toISOString().slice(0, 10); }
     function switchTab(tab) {
       ['transactions', 'ledgers', 'statements'].forEach(t => {
         document.getElementById(`view-${t}`).classList.toggle('hidden', t !== tab);
-        const btn = document.getElementById(`tab-${t}`);
-        if (t === tab) {
-          btn.className = 'tab-btn border-b-2 border-slate-900 text-slate-900 font-semibold px-4 py-2.5 text-sm';
-        } else {
-          btn.className = 'tab-btn border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-medium px-4 py-2.5 text-sm';
-        }
+        document.getElementById(`tab-${t}`).className = t === tab ? 'tab-btn border-b-2 border-slate-900 text-slate-900 font-semibold px-4 py-2.5 text-sm' : 'tab-btn border-b-2 border-transparent text-slate-500 font-medium px-4 py-2.5 text-sm';
       });
       renderAll();
     }
-
     function handleTypeChange() {
-      const type = document.getElementById('txType').value;
-      const isParty = TX_META[type].isParty;
+      let isParty = TX_META[document.getElementById('txType').value].isParty;
       document.getElementById('categoryField').classList.toggle('hidden', isParty);
       document.getElementById('partyField').classList.toggle('hidden', !isParty);
-      document.getElementById('txCategory').required = !isParty;
-      document.getElementById('txParty').required = isParty;
     }
-
     function handleAddTransaction(e) {
-      e.preventDefault();
-      evaluateAmountInput('txAmount');
-      const date = document.getElementById('txDate').value;
-      const type = document.getElementById('txType').value;
-      const meta = TX_META[type];
-      const category = meta.isParty ? '' : (document.getElementById('txCategory').value.trim() || 'General');
-      const rawParty = meta.isParty ? (document.getElementById('txParty').value.trim() || 'Unnamed Party') : '';
-      const amount = parseFloat(document.getElementById('txAmount').value);
-      const desc = document.getElementById('txDesc').value.trim();
-
-      if (!amount || amount <= 0) return;
-
-      const cashDelta = amount * meta.cashSign;
-      state.transactions.push({
-        id: Date.now(),
-        date,
-        type,
-        category,
-        party: rawParty,
-        amount,
-        desc
-      });
-
-      if (meta.cashSign !== 0) {
-        state.actualCash = Number((Number(state.actualCash) + cashDelta).toFixed(2));
-      }
-
-      if (meta.isParty) {
-        state.selectedPartyKey = `${meta.partyRole}:${rawParty.toLowerCase()}`;
-      }
-
-      document.getElementById('txAmount').value = '';
-      document.getElementById('txDesc').value = '';
-      document.getElementById('actualCashInput').value = state.actualCash;
-
-      saveState();
-      renderAll();
+      e.preventDefault(); evaluateAmountInput('txAmount');
+      let type = document.getElementById('txType').value, meta = TX_META[type];
+      let amt = parseFloat(document.getElementById('txAmount').value);
+      if (!amt || amt <= 0) return;
+      let rawParty = meta.isParty ? document.getElementById('txParty').value.trim() : '';
+      state.transactions.push({ id: Date.now(), date: document.getElementById('txDate').value, type, category: meta.isParty ? '' : document.getElementById('txCategory').value.trim(), party: rawParty, amount: amt, desc: document.getElementById('txDesc').value.trim() });
+      if (meta.cashSign !== 0) state.actualCash = Number((Number(state.actualCash) + (amt * meta.cashSign)).toFixed(2));
+      document.getElementById('txAmount').value = ''; document.getElementById('txDesc').value = ''; document.getElementById('actualCashInput').value = state.actualCash;
+      saveState(); renderAll();
     }
-
-    function deleteTransaction(id) {
-      if (!confirm('Delete this transaction?')) return;
-      state.transactions = state.transactions.filter(t => t.id !== id);
-      saveState();
-      renderAll();
-    }
-
-    function openEditModal(id) {
-      const tx = state.transactions.find(t => t.id === id);
-      if (!tx) return;
-      document.getElementById('editTxId').value = tx.id;
-      document.getElementById('editDate').value = tx.date;
-      document.getElementById('editType').value = tx.type;
-      document.getElementById('editCategory').value = tx.category || '';
-      document.getElementById('editParty').value = tx.party || '';
-      document.getElementById('editAmount').value = tx.amount;
-      document.getElementById('editDesc').value = tx.desc || '';
-      handleEditTypeChange();
-      document.getElementById('editModal').classList.remove('hidden');
-    }
-
-    function handleEditTypeChange() {
-      const type = document.getElementById('editType').value;
-      const isParty = TX_META[type].isParty;
-      document.getElementById('editCategoryField').classList.toggle('hidden', isParty);
-      document.getElementById('editPartyField').classList.toggle('hidden', !isParty);
-    }
-
-    function closeEditModal() {
-      document.getElementById('editModal').classList.add('hidden');
-    }
-
-    function handleSaveEdit(e) {
-      e.preventDefault();
-      evaluateAmountInput('editAmount');
-      const id = Number(document.getElementById('editTxId').value);
-      const tx = state.transactions.find(t => t.id === id);
-      if (!tx) return;
-
-      tx.date = document.getElementById('editDate').value;
-      tx.type = document.getElementById('editType').value;
-      const meta = TX_META[tx.type];
-      tx.category = meta.isParty ? '' : document.getElementById('editCategory').value.trim();
-      tx.party = meta.isParty ? document.getElementById('editParty').value.trim() : '';
-      tx.amount = parseFloat(document.getElementById('editAmount').value) || 0;
-      tx.desc = document.getElementById('editDesc').value.trim();
-
-      closeEditModal();
-      saveState();
-      renderAll();
-    }
-
-    function updateOpeningCash() {
-      state.openingCash = parseFloat(document.getElementById('openingCashInput').value) || 0;
-      saveState();
-      renderAll();
-    }
-
-    function updateActualCash() {
-      const val = document.getElementById('actualCashInput').value;
-      state.actualCash = val === '' ? 0 : parseFloat(val);
-      saveState();
-      renderAll();
-    }
-
-    function syncActualWithBook() {
-      const calc = computeFinancials();
-      state.actualCash = Number(calc.systemCash.toFixed(2));
-      document.getElementById('actualCashInput').value = state.actualCash;
-      saveState();
-      renderAll();
-    }
-
-    function updateCurrency() {
-      state.currency = document.getElementById('currencySelect').value;
-      saveState();
-      renderAll();
-    }
+    function deleteTransaction(id) { if(confirm('Delete?')) { state.transactions = state.transactions.filter(t => t.id !== id); saveState(); renderAll(); } }
+    function updateOpeningCash() { state.openingCash = parseFloat(document.getElementById('openingCashInput').value) || 0; saveState(); renderAll(); }
+    function updateActualCash() { state.actualCash = parseFloat(document.getElementById('actualCashInput').value) || 0; saveState(); renderAll(); }
+    function syncActualWithBook() { state.actualCash = Number(computeFinancials().systemCash.toFixed(2)); document.getElementById('actualCashInput').value = state.actualCash; saveState(); renderAll(); }
 
     function computeFinancials() {
-      let totalIncome = 0;
-      let totalExpense = 0;
-      let cashFlow = 0;
-      let totalOpeningDebtors = 0;
-      let totalOpeningCreditors = 0;
-
-      const incomeByCategory = {};
-      const expenseByCategory = {};
-      const accounts = {};
-
-      const sortedTx = [...state.transactions].sort((a, b) => a.date.localeCompare(b.date) || a.id - b.id);
-
-      for (const tx of sortedTx) {
-        const meta = TX_META[tx.type];
-        const amt = Number(tx.amount) || 0;
-
-        cashFlow += amt * meta.cashSign;
-
-        if (tx.type === 'INCOME') {
-          totalIncome += amt;
-          incomeByCategory[tx.category] = (incomeByCategory[tx.category] || 0) + amt;
-        } else if (tx.type === 'EXPENSE') {
-          totalExpense += amt;
-          expenseByCategory[tx.category] = (expenseByCategory[tx.category] || 0) + amt;
-        } else if (meta.isParty) {
-          const rawName = tx.party.trim();
-          const role = meta.partyRole;
-          const accountKey = `${role}:${rawName.toLowerCase()}`;
-
-          if (!accounts[accountKey]) {
-            accounts[accountKey] = {
-              key: accountKey,
-              name: rawName,
-              role: role,
-              balance: 0,
-              history: []
-            };
-          }
-
+      let cashFlow = 0, inc = 0, exp = 0, accounts = {}, tOpDr = 0, tOpCr = 0;
+      state.transactions.forEach(tx => {
+        let m = TX_META[tx.type], a = tx.amount;
+        cashFlow += a * m.cashSign;
+        if(tx.type === 'INCOME') inc += a;
+        if(tx.type === 'EXPENSE') exp += a;
+        if(m.isParty) {
+          let k = `${m.partyRole}:${tx.party.toLowerCase()}`;
+          if(!accounts[k]) accounts[k] = { key: k, name: tx.party, role: m.partyRole, balance: 0, history: [] };
           let dr = 0, cr = 0;
-          if (tx.type === 'OPENING_DEBTOR') {
-            dr = amt;
-            accounts[accountKey].balance += amt;
-            totalOpeningDebtors += amt;
-          } else if (tx.type === 'OPENING_CREDITOR') {
-            cr = amt;
-            accounts[accountKey].balance += amt;
-            totalOpeningCreditors += amt;
-          } else if (tx.type === 'LEND') {
-            dr = amt;
-            accounts[accountKey].balance += amt;
-          } else if (tx.type === 'COLLECT') {
-            cr = amt;
-            accounts[accountKey].balance -= amt;
-          } else if (tx.type === 'BORROW') {
-            cr = amt;
-            accounts[accountKey].balance += amt;
-          } else if (tx.type === 'REPAY') {
-            dr = amt;
-            accounts[accountKey].balance -= amt;
-          }
-
-          accounts[accountKey].history.push({
-            ...tx,
-            dr,
-            cr,
-            runningBalance: accounts[accountKey].balance
-          });
-        }
-      }
-
-      const systemCash = (Number(state.openingCash) || 0) + cashFlow;
-      const actualCash = Number(state.actualCash) || 0;
-      const cashDiff = actualCash - systemCash;
-
-      let totalDebtors = 0;
-      let totalCreditors = 0;
-      const debtorsList = [];
-      const creditorsList = [];
-
-      Object.values(accounts).forEach(acc => {
-        const bal = Number(acc.balance.toFixed(2));
-        if (acc.role === 'DEBTOR') {
-          totalDebtors += bal;
-          debtorsList.push({ key: acc.key, name: acc.name, balance: bal });
-        } else if (acc.role === 'CREDITOR') {
-          totalCreditors += bal;
-          creditorsList.push({ key: acc.key, name: acc.name, balance: bal });
+          if(tx.type === 'OPENING_DEBTOR') { dr = a; tOpDr += a; accounts[k].balance += a; }
+          else if(tx.type === 'OPENING_CREDITOR') { cr = a; tOpCr += a; accounts[k].balance += a; }
+          else if(tx.type === 'LEND') { dr = a; accounts[k].balance += a; }
+          else if(tx.type === 'COLLECT') { cr = a; accounts[k].balance -= a; }
+          else if(tx.type === 'BORROW') { cr = a; accounts[k].balance += a; }
+          else if(tx.type === 'REPAY') { dr = a; accounts[k].balance -= a; }
+          accounts[k].history.push({...tx, dr, cr, run: accounts[k].balance});
         }
       });
-
-      const netIncome = totalIncome - totalExpense;
-      const totalAssets = actualCash + totalDebtors;
-      const startingCapital = (Number(state.openingCash) || 0) + totalOpeningDebtors - totalOpeningCreditors;
-      const totalEquity = startingCapital + netIncome + cashDiff;
-      const totalLiabAndEquity = totalCreditors + totalEquity;
-
-      return {
-        systemCash,
-        actualCash,
-        cashDiff,
-        totalIncome,
-        totalExpense,
-        netIncome,
-        incomeByCategory,
-        expenseByCategory,
-        accounts,
-        totalDebtors,
-        totalCreditors,
-        debtorsList,
-        creditorsList,
-        startingCapital,
-        totalAssets,
-        totalEquity,
-        totalLiabAndEquity
-      };
+      let sysCash = (Number(state.openingCash)||0) + cashFlow, actCash = Number(state.actualCash)||0, cDiff = actCash - sysCash;
+      let tDr = 0, tCr = 0, drL = [], crL = [];
+      Object.values(accounts).forEach(a => { if(a.role==='DEBTOR'){ tDr+=a.balance; drL.push(a); } else { tCr+=a.balance; crL.push(a); } });
+      return { systemCash: sysCash, actualCash: actCash, cashDiff: cDiff, net: inc - exp, accounts, totalDebtors: tDr, totalCreditors: tCr, debtorsList: drL, creditorsList: crL, totalEquity: (Number(state.openingCash)||0) + tOpDr - tOpCr + (inc - exp) + cDiff, totalAssets: actCash + tDr };
     }
 
     function renderAll() {
-      const calc = computeFinancials();
+      let c = computeFinancials();
+      document.getElementById('kpiSystemCash').textContent = fmt(c.systemCash);
+      document.getElementById('kpiDebtors').textContent = fmt(c.totalDebtors);
+      document.getElementById('kpiCreditors').textContent = fmt(c.totalCreditors);
+      document.getElementById('kpiCashDiff').textContent = fmt(c.cashDiff);
 
-      document.getElementById('kpiSystemCash').textContent = fmt(calc.systemCash);
-      document.getElementById('kpiDebtors').textContent = fmt(calc.totalDebtors);
-      document.getElementById('kpiCreditors').textContent = fmt(calc.totalCreditors);
+      let tbody = document.getElementById('txTableBody');
+      tbody.innerHTML = state.transactions.map(tx => {
+        let m = TX_META[tx.type];
+        return `<tr class="hover:bg-slate-50"><td class="py-3 px-4">${tx.date}</td><td class="py-3 px-4"><span class="px-2 py-1 rounded text-xs ${m.badge}">${m.label}</span></td><td class="py-3 px-4">${m.isParty ? tx.party : tx.category}</td><td class="py-3 px-4 text-right">${m.cashSign===0?'-':fmt(tx.amount)}</td><td class="py-3 px-4 text-center"><button onclick="deleteTransaction(${tx.id})" class="text-rose-500 text-xs">Del</button></td></tr>`;
+      }).join('');
 
-      const diffEl = document.getElementById('kpiCashDiff');
-      const badgeEl = document.getElementById('kpiCashDiffBadge');
-      const diffPrefix = calc.cashDiff > 0 ? '+' : '';
-      diffEl.textContent = diffPrefix + fmt(calc.cashDiff);
-
-      if (Math.abs(calc.cashDiff) < 0.005) {
-        diffEl.className = 'text-2xl font-bold mt-1 text-emerald-600';
-        badgeEl.className = 'text-xs font-medium text-emerald-600';
-        badgeEl.textContent = 'Exact Match (Balanced)';
-      } else if (calc.cashDiff > 0) {
-        diffEl.className = 'text-2xl font-bold mt-1 text-indigo-600';
-        badgeEl.className = 'text-xs font-medium text-indigo-600';
-        badgeEl.textContent = 'Excess / Unrecorded Inflow (+)';
-      } else {
-        diffEl.className = 'text-2xl font-bold mt-1 text-rose-600';
-        badgeEl.className = 'text-xs font-medium text-rose-600';
-        badgeEl.textContent = 'Shortage / Unrecorded Outflow (-)';
-      }
-
-      const partyNames = [...new Set(Object.values(calc.accounts).map(a => a.name))];
-      document.getElementById('partySuggestions').innerHTML = partyNames
-        .map(p => `<option value="${escapeHtml(p)}"></option>`)
-        .join('');
-
-      renderTransactionsTable();
-      renderPartyLedgers(calc);
-      renderStatements(calc);
-      checkBackupReminder();
-    }
-
-    function renderTransactionsTable() {
-      const filterType = document.getElementById('filterType').value;
-      const dateRange = document.getElementById('filterDateRange').value;
-      const query = document.getElementById('searchTx').value.toLowerCase().trim();
-      const tbody = document.getElementById('txTableBody');
-
-      const todayStr = new Date().toISOString().slice(0, 10);
-      const currentMonthStr = todayStr.slice(0, 7);
+      let pList = document.getElementById('partyListContainer');
+      pList.innerHTML = Object.values(c.accounts).map(a => `<button onclick="state.selectedPartyKey='${a.key}'; renderAll()" class="w-full text-left p-4 hover:bg-slate-50 border-b"><b>${a.name}</b> <span class="float-right">${fmt(a.balance)} ${a.role==='DEBTOR'?'Dr':'Cr'}</span></button>`).join('');
       
-      const lastMonthDate = new Date();
-      lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
-      const lastMonthStr = lastMonthDate.toISOString().slice(0, 7);
-
-      const filtered = [...state.transactions]
-        .sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id)
-        .filter(tx => {
-          if (filterType !== 'ALL' && tx.type !== filterType) return false;
-          if (dateRange === 'TODAY' && tx.date !== todayStr) return false;
-          if (dateRange === 'THIS_MONTH' && !tx.date.startsWith(currentMonthStr)) return false;
-          if (dateRange === 'LAST_MONTH' && !tx.date.startsWith(lastMonthStr)) return false;
-
-          if (!query) return true;
-          return (
-            (tx.party && tx.party.toLowerCase().includes(query)) ||
-            (tx.category && tx.category.toLowerCase().includes(query)) ||
-            (tx.desc && tx.desc.toLowerCase().includes(query))
-          );
-        });
-
-      if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-400">No matching transactions found.</td></tr>`;
-        return;
+      let pBody = document.getElementById('partyLedgerBody');
+      if(state.selectedPartyKey && c.accounts[state.selectedPartyKey]){
+        pBody.innerHTML = c.accounts[state.selectedPartyKey].history.map(h => `<tr><td class="py-2 px-4">${h.date}</td><td class="py-2 px-4">${TX_META[h.type].label}</td><td class="py-2 px-4 text-right">${h.dr?fmt(h.dr):'-'}</td><td class="py-2 px-4 text-right">${h.cr?fmt(h.cr):'-'}</td><td class="py-2 px-4 text-right font-bold">${fmt(h.run)}</td></tr>`).join('');
       }
 
-      tbody.innerHTML = filtered.map(tx => {
-        const meta = TX_META[tx.type];
-        let cashDisplay = '—';
-        let amtClass = 'text-slate-500 font-medium';
-
-        if (meta.cashSign > 0) {
-          cashDisplay = `+${fmt(tx.amount)}`;
-          amtClass = 'text-emerald-600 font-semibold';
-        } else if (meta.cashSign < 0) {
-          cashDisplay = `-${fmt(tx.amount)}`;
-          amtClass = 'text-rose-600 font-semibold';
-        } else {
-          cashDisplay = `<span class="text-xs text-slate-400 font-normal">No Cash (Bal: ${fmt(tx.amount)})</span>`;
-        }
-
-        const particulars = meta.isParty
-          ? `<div><span class="font-semibold text-slate-900">${escapeHtml(tx.party)}</span> <span class="text-[10px] px-1.5 py-0.5 rounded ${meta.partyRole === 'DEBTOR' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">${meta.partyRole === 'DEBTOR' ? 'Debtor' : 'Creditor'}</span></div>`
-          : `<span class="text-slate-700 font-medium">${escapeHtml(tx.category)}</span>`;
-
-        return `
-          <tr class="hover:bg-slate-50 transition">
-            <td class="py-3 px-4 whitespace-nowrap text-slate-600 text-xs">${tx.date}</td>
-            <td class="py-3 px-4 whitespace-nowrap">
-              <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${meta.badge}">${meta.label}</span>
-            </td>
-            <td class="py-3 px-4">${particulars}</td>
-            <td class="py-3 px-4 text-slate-500 text-xs">${escapeHtml(tx.desc || '—')}</td>
-            <td class="py-3 px-4 text-right whitespace-nowrap ${amtClass}">${cashDisplay}</td>
-            <td class="py-3 px-4 text-center no-print whitespace-nowrap space-x-2">
-              <button onclick="openEditModal(${tx.id})" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</button>
-              <button onclick="deleteTransaction(${tx.id})" class="text-xs text-rose-500 hover:text-rose-700 font-medium">Delete</button>
-            </td>
-          </tr>
-        `;
-      }).join('');
+      document.getElementById('bsCreditorsBody').innerHTML = c.creditorsList.map(cr => `<tr><td class="py-2">${cr.name}</td><td class="py-2 text-right">${fmt(cr.balance)}</td></tr>`).join('');
+      document.getElementById('bsDebtorsBody').innerHTML = c.debtorsList.map(dr => `<tr><td class="py-2">${dr.name}</td><td class="py-2 text-right">${fmt(dr.balance)}</td></tr>`).join('');
+      document.getElementById('bsNetIncome').textContent = fmt(c.net);
+      document.getElementById('bsTotalEquity').textContent = fmt(c.totalEquity);
+      document.getElementById('bsTotalLiabEquity').textContent = fmt(c.totalCreditors + c.totalEquity);
+      document.getElementById('bsActualCash').textContent = fmt(c.actualCash);
+      document.getElementById('bsTotalAssets').textContent = fmt(c.totalAssets);
     }
-
-    function selectPartyAccount(key) {
-      state.selectedPartyKey = key;
-      saveState();
-      renderAll();
-    }
-
-    function renderPartyLedgers(calc) {
-      const container = document.getElementById('partyListContainer');
-      const accountList = Object.values(calc.accounts);
-
-      if (accountList.length === 0) {
-        container.innerHTML = `<div class="p-6 text-center text-sm text-slate-400">No party transactions recorded yet.</div>`;
-        document.getElementById('selectedPartyTitle').textContent = 'No Account Selected';
-        document.getElementById('selectedPartyBadge').textContent = '—';
-        document.getElementById('partyLedgerBody').innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-400">Record a Party Transaction to generate statements.</td></tr>`;
-        return;
-      }
-
-      if (!state.selectedPartyKey || !calc.accounts[state.selectedPartyKey]) {
-        state.selectedPartyKey = accountList[0].key;
-      }
-
-      container.innerHTML = accountList.map(acc => {
-        const isSelected = acc.key === state.selectedPartyKey;
-        const bal = Number(acc.balance.toFixed(2));
-        const isDebtor = acc.role === 'DEBTOR';
-        const tag = isDebtor
-          ? `<span class="text-xs font-bold text-emerald-600">${fmt(bal)} Dr (Receivable)</span>`
-          : `<span class="text-xs font-bold text-rose-600">${fmt(bal)} Cr (Payable)</span>`;
-
-        return `
-          <button
-            onclick="selectPartyAccount('${escapeJs(acc.key)}')"
-            class="w-full text-left p-4 flex justify-between items-center hover:bg-slate-50 transition ${isSelected ? 'bg-slate-100 border-l-4 border-slate-900' : ''}"
-          >
-            <div>
-              <div class="font-semibold text-slate-900 text-sm">
-                ${escapeHtml(acc.name)} 
-                <span class="text-[10px] px-1.5 py-0.5 rounded font-normal ${isDebtor ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
-                  ${isDebtor ? 'Debtor (Dr)' : 'Creditor (Cr)'}
-                </span>
-              </div>
-              <div class="text-xs text-slate-400">${acc.history.length} transaction(s)</div>
-            </div>
-            <div class="text-right">${tag}</div>
-          </button>
-        `;
-      }).join('');
-
-      const active = calc.accounts[state.selectedPartyKey];
-      const isDebtor = active.role === 'DEBTOR';
-      document.getElementById('selectedPartyTitle').textContent = `${active.name} (${isDebtor ? 'Receivable - Debtor' : 'Payable - Creditor'})`;
-
-      const badge = document.getElementById('selectedPartyBadge');
-      if (isDebtor) {
-        badge.className = 'text-xs font-bold px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-800';
-        badge.textContent = `Net Receivable: ${fmt(active.balance)} Dr`;
-      } else {
-        badge.className = 'text-xs font-bold px-3 py-1.5 rounded-full bg-rose-100 text-rose-800';
-        badge.textContent = `Net Payable: ${fmt(active.balance)} Cr`;
-      }
-
-      document.getElementById('partyLedgerBody').innerHTML = active.history.map(item => {
-        const meta = TX_META[item.type];
-        const run = Number(item.runningBalance.toFixed(2));
-        const runTag = isDebtor ? `${fmt(run)} Dr` : `${fmt(run)} Cr`;
-
-        return `
-          <tr class="hover:bg-slate-50">
-            <td class="py-3 px-4 whitespace-nowrap text-slate-600 text-xs">${item.date}</td>
-            <td class="py-3 px-4">
-              <span class="font-medium text-slate-800">${meta.label}</span>
-              ${item.desc ? `<span class="text-slate-400 text-xs block">${escapeHtml(item.desc)}</span>` : ''}
-            </td>
-            <td class="py-3 px-4 text-right font-medium text-emerald-700">${item.dr ? fmt(item.dr) : '—'}</td>
-            <td class="py-3 px-4 text-right font-medium text-rose-700">${item.cr ? fmt(item.cr) : '—'}</td>
-            <td class="py-3 px-4 text-right font-bold text-slate-900">${runTag}</td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function renderStatements(calc) {
-      const incEntries = Object.entries(calc.incomeByCategory);
-      document.getElementById('incomeStatementBody').innerHTML = incEntries.length
-        ? incEntries.map(([cat, val]) => `
-            <tr>
-              <td class="py-2 text-slate-700">${escapeHtml(cat)}</td>
-              <td class="py-2 text-right font-medium text-slate-900">${fmt(val)}</td>
-            </tr>
-          `).join('')
-        : `<tr><td colspan="2" class="py-4 text-slate-400 text-center">No income recorded</td></tr>`;
-
-      const expEntries = Object.entries(calc.expenseByCategory);
-      document.getElementById('expenseStatementBody').innerHTML = expEntries.length
-        ? expEntries.map(([cat, val]) => `
-            <tr>
-              <td class="py-2 text-slate-700">${escapeHtml(cat)}</td>
-              <td class="py-2 text-right font-medium text-slate-900">${fmt(val)}</td>
-            </tr>
-          `).join('')
-        : `<tr><td colspan="2" class="py-4 text-slate-400 text-center">No expenses recorded</td></tr>`;
-
-      document.getElementById('totalIncomeCell').textContent = fmt(calc.totalIncome);
-      document.getElementById('totalExpenseCell').textContent = fmt(calc.totalExpense);
-
-      const netHeader = document.getElementById('netIncomeHeaderBadge');
-      netHeader.textContent = `Net Surplus: ${fmt(calc.netIncome)}`;
-      netHeader.className = calc.netIncome >= 0
-        ? 'text-xs font-bold px-3 py-1.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30'
-        : 'text-xs font-bold px-3 py-1.5 rounded bg-rose-500/20 text-rose-300 border border-rose-400/30';
-
-      document.getElementById('bsCreditorsBody').innerHTML = calc.creditorsList.length
-        ? calc.creditorsList.map(c => `
-            <tr>
-              <td class="py-2 text-slate-700">${escapeHtml(c.name)} (Cr)</td>
-              <td class="py-2 text-right font-medium text-rose-600">${fmt(c.balance)}</td>
-            </tr>
-          `).join('') + `
-            <tr class="bg-rose-50/60 font-semibold">
-              <td class="py-2 px-2 text-slate-800">Total Creditors Payable</td>
-              <td class="py-2 px-2 text-right text-rose-700">${fmt(calc.totalCreditors)}</td>
-            </tr>
-          `
-        : `<tr><td class="py-2 text-slate-400">No Creditors Payable</td><td class="py-2 text-right text-slate-500">${fmt(0)}</td></tr>`;
-
-      document.getElementById('bsOpeningCap').textContent = fmt(calc.startingCapital);
-      document.getElementById('bsNetIncome').textContent = fmt(calc.netIncome);
-      document.getElementById('bsCashDiffAdj').textContent = (calc.cashDiff > 0 ? '+' : '') + fmt(calc.cashDiff);
-      document.getElementById('bsTotalEquity').textContent = fmt(calc.totalEquity);
-      document.getElementById('bsTotalLiabEquity').textContent = fmt(calc.totalLiabAndEquity);
-
-      document.getElementById('bsBookCash').textContent = fmt(calc.systemCash);
-      document.getElementById('bsAssetCashDiff').textContent = (calc.cashDiff > 0 ? '+' : '') + fmt(calc.cashDiff);
-      document.getElementById('bsActualCash').textContent = fmt(calc.actualCash);
-
-      document.getElementById('bsDebtorsBody').innerHTML = calc.debtorsList.length
-        ? calc.debtorsList.map(d => `
-            <tr>
-              <td class="py-2 text-slate-700">${escapeHtml(d.name)} (Dr)</td>
-              <td class="py-2 text-right font-medium text-emerald-600">${fmt(d.balance)}</td>
-            </tr>
-          `).join('') + `
-            <tr class="bg-emerald-50/60 font-semibold">
-              <td class="py-2 px-2 text-slate-800">Total Debtors Receivable</td>
-              <td class="py-2 px-2 text-right text-emerald-700">${fmt(calc.totalDebtors)}</td>
-            </tr>
-          `
-        : `<tr><td class="py-2 text-slate-400">No Debtors Receivable</td><td class="py-2 text-right text-slate-500">${fmt(0)}</td></tr>`;
-
-      document.getElementById('bsTotalAssets').textContent = fmt(calc.totalAssets);
-    }
-
+    
     function exportData() {
-      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `finledger-backup-${new Date().toISOString().slice(0, 10)}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-      localStorage.setItem(BACKUP_TIMESTAMP_KEY, Date.now().toString());
-      dismissBackupBanner();
-      toggleMenu(false);
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(state)], {type:'application/json'})); a.download = 'backup.json'; a.click(); toggleMenu(false);
     }
-
-    function importData(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = e => {
-        try {
-          const imported = JSON.parse(e.target.result);
-          if (imported && Array.isArray(imported.transactions)) {
-            state = imported;
-            saveState();
-            syncInputsFromState();
-            renderAll();
-            alert('Backup restored successfully!');
-            toggleMenu(false);
-          }
-        } catch (err) {
-          alert('Invalid JSON backup file.');
-        }
-      };
-      reader.readAsText(file);
+    function importData(e) {
+      let r = new FileReader(); r.onload = ev => { state = JSON.parse(ev.target.result); saveState(); syncInputsFromState(); renderAll(); alert('Imported!'); }; r.readAsText(e.target.files[0]);
     }
+    function clearAllData() { if(confirm('Reset all?')){ state = {currency:'₹', openingCash:0, actualCash:0, selectedPartyKey:null, transactions:[]}; saveState(); renderAll(); } }
+    
+    loadState(); syncInputsFromState(); handleTypeChange(); renderAll(); initPinLock();
 
-    function clearAllData() {
-      if (!confirm('Clear all transactions and reset balances to zero?')) return;
-      state.openingCash = 0;
-      state.actualCash = 0;
-      state.selectedPartyKey = null;
-      state.transactions = [];
-      saveState();
-      syncInputsFromState();
-      renderAll();
-      toggleMenu(false);
+    // REGISTER SERVICE WORKER FOR OFFLINE PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(() => console.log('PWA Offline Ready'))
+          .catch(err => console.error('SW Fail:', err));
+      });
     }
-
-    function escapeHtml(str) {
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    }
-
-    function escapeJs(str) {
-      return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-    }
-
-    loadState();
-    syncInputsFromState();
-    handleTypeChange();
-    renderAll();
-    initPinLock();
   </script>
 </body>
 </html>
